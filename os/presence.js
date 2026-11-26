@@ -1,6 +1,11 @@
-// 小灶官网 · 多人鼠标与轻量协同
+// Сяоцзао · совместные курсоры и легкая координация
 (function () {
   if (!("WebSocket" in window)) return;
+
+  // ?presence=0 полностью отключает подключение (например, для демо/офлайна).
+  var ENABLED = !/[?&]presence=0\b/.test(location.search);
+  // Лимит попыток переподключения: без него страница бесконечно долбит сервер.
+  var MAX_RETRIES = 10;
 
   var STORE_KEY = "xz-presence-profile";
   var SEND_MS = 70;
@@ -33,7 +38,7 @@
     var colors = ["#4f8cff", "#ff5c8a", "#24c486", "#ffb020", "#8c6cff", "#00a8c8"];
     var p = {
       id: id,
-      name: "访客 " + id.slice(0, 2).toUpperCase(),
+      name: "Гость " + id.slice(0, 2).toUpperCase(),
       color: colors[Math.floor(Math.random() * colors.length)]
     };
     try { localStorage.setItem(STORE_KEY, JSON.stringify(p)); } catch (e) {}
@@ -96,6 +101,11 @@
   }
 
   function scheduleReconnect() {
+    if (!ENABLED) return;
+    if (reconnectTry >= MAX_RETRIES) {
+      window.dispatchEvent(new CustomEvent("xz-presence-offline", { detail: { tries: reconnectTry } }));
+      return;
+    }
     var wait = RECONNECT_MS[Math.min(reconnectTry, RECONNECT_MS.length - 1)];
     reconnectTry += 1;
     setTimeout(connect, wait);
@@ -134,7 +144,7 @@
     node.className = "xz-peer-cursor";
     node.style.setProperty("--c", peer.color || "#4f8cff");
     node.innerHTML = '<span class="arrow"></span><span class="tag"></span>';
-    node.querySelector(".tag").textContent = peer.name || "访客";
+    node.querySelector(".tag").textContent = peer.name || "Гость";
     layer().appendChild(node);
     nodes[peer.id] = node;
     return node;
@@ -146,7 +156,7 @@
     peers[peer.id] = peer;
     var node = cursorNode(peer);
     node.style.setProperty("--c", peer.color || "#4f8cff");
-    node.querySelector(".tag").textContent = peer.name || "访客";
+    node.querySelector(".tag").textContent = peer.name || "Гость";
     node.classList.toggle("down", !!peer.down);
     node.style.transform = "translate3d(" + Math.round(peer.x * window.innerWidth) + "px," + Math.round(peer.y * window.innerHeight) + "px,0)";
     node.classList.add("on");
@@ -261,5 +271,5 @@
     send: send
   };
 
-  connect();
+  if (ENABLED) connect();
 })();

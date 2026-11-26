@@ -10,8 +10,8 @@
   --i-line: rgba(60, 60, 67, 0.16);
   --i-bg: #f2f2f7;
   --i-card: #ffffff;
-  --font: "Noto Sans SC", -apple-system, system-ui, sans-serif;
-  --mono: "SF Mono", ui-monospace, Menlo, monospace;
+  --font: "Noto Sans SC", "Noto Sans", "PT Sans", "Segoe UI", -apple-system, system-ui, sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
 *::-webkit-scrollbar { display: none; width: 0; height: 0; }
@@ -427,7 +427,7 @@ body.is-locked .ios-sticker {
 .cs-brand .x { color: #a89e8a; font-size: 11px; }
 .cs-brand .by { font-size: 12px; font-weight: 700; color: #7a7263; white-space: nowrap; }
 .cs-h-m {
-  font-family: "Noto Serif SC", serif;
+  font-family: "Noto Serif SC", "Noto Serif", "PT Serif", Georgia, serif;
   font-size: 23px;
   font-weight: 900;
   color: #201d16;

@@ -1,5 +1,8 @@
-// 小灶 OS · 极简窗口管理器
+// Сяоцзао OS · минимальный оконный менеджер
 (function () {
+  function tr(key, fallback) {
+    return window.xztr ? window.xztr(key, fallback) : fallback;
+  }
   var desktop = null;
   var zTop = 10;
   var openCount = 0;
@@ -168,7 +171,7 @@
     var dockRect = dock && dock.getBoundingClientRect();
     var maxH = dockRect ? Math.max(240, dockRect.top - deskRect.top - 10) : desk.clientHeight;
     var r = el.getBoundingClientRect();
-    // 先把当前尺寸固化为 px，确保过渡有起点
+    // Сначала фиксируем текущий размер в px, чтобы у перехода была начальная точка
     el.style.width = r.width + 'px';
     el.style.height = r.height + 'px';
     el.style.maxHeight = 'none';
@@ -219,11 +222,11 @@
     var traffic = document.createElement('span');
     traffic.className = 'traffic';
     var bClose = document.createElement('button');
-    bClose.className = 't-close'; bClose.title = '关闭';
+    bClose.className = 't-close'; bClose.title = tr('window.close', 'Закрыть');
     var bMin = document.createElement('button');
-    bMin.className = 't-min'; bMin.title = '最小化';
+    bMin.className = 't-min'; bMin.title = tr('window.minimize', 'Свернуть');
     var bMax = document.createElement('button');
-    bMax.className = 't-max'; bMax.title = '最大化';
+    bMax.className = 't-max'; bMax.title = tr('window.maximize', 'Развернуть');
     traffic.appendChild(bClose); traffic.appendChild(bMin); traffic.appendChild(bMax);
     bar.appendChild(traffic);
     if (opts.barHtml) {
@@ -242,7 +245,7 @@
     el.appendChild(bar); el.appendChild(body);
     desktop.appendChild(el);
 
-    // 级联定位（可被 opts.x/opts.y 覆盖）
+    // Каскадное позиционирование (переопределяется opts.x/opts.y)
     var n = openCount % 7;
     var baseX = (desktop.clientWidth - Math.min(opts.width || 720, desktop.clientWidth - 32)) / 2;
     el.style.left = Math.max(12, baseX + (n - 2) * 36) + 'px';
@@ -260,7 +263,7 @@
 
     wins[id] = el;
     focusWin(el);
-    void el.offsetWidth; // 强制 reflow，确保入场过渡稳定触发
+    void el.offsetWidth; // принудительный reflow, чтобы входная анимация сработала стабильно
     requestAnimationFrame(function () { el.classList.add('open'); });
 
     var d = document.querySelector('.dock-item[data-app="' + id + '"]');

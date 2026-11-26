@@ -1,5 +1,16 @@
-// 小灶 OS · 桌面图标：内容渲染 + 框选 + 拖拽 + Quick Look
+// Сяоцзао OS · значки рабочего стола: рендер контента + рамка выделения + перетаскивание + Quick Look
 (function () {
+  function tr(key, fallback) {
+    return window.xztr ? window.xztr(key, fallback) : fallback;
+  }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  var PLATFORM_KEYS = { 'B站': 'platform.bilibili', '抖音': 'platform.douyin', '小红书': 'platform.xiaohongshu', '飞书': 'platform.feishu' };
+  function platformLabel(p) {
+    var key = PLATFORM_KEYS[p];
+    return key ? tr(key, p) : (p || tr('desk.platform.video', 'Видео'));
+  }
   var layer = document.querySelector('.desk-icons');
   var desk = document.querySelector('.desktop');
   if (!layer || !desk) return;
@@ -13,6 +24,7 @@
     layer.innerHTML = '';
     videos.forEach(function (v, i) {
       var cleanTitle = (v.title || '').replace(/^【商】/, '');
+      var label = tr('video.' + (i + 1), cleanTitle);
       var a = document.createElement('a');
       a.className = 'desk-file';
       a.href = v.url;
@@ -20,7 +32,7 @@
       a.rel = 'noopener';
       a.tabIndex = 0;
       a.dataset.id = 'v' + (i + 1);
-      a.dataset.title = cleanTitle;
+      a.dataset.title = label;
       a.dataset.cover = v.cover;
       a.dataset.embed = v.embed || '';
       a.dataset.platform = v.platform || '视频';
@@ -35,14 +47,14 @@
       play.textContent = '▶';
       var plat = document.createElement('span');
       plat.className = 'dur';
-      plat.textContent = v.platform || '视频';
+      plat.textContent = platformLabel(v.platform);
       thumb.appendChild(img);
       thumb.appendChild(play);
       thumb.appendChild(plat);
 
       var name = document.createElement('span');
       name.className = 'fname';
-      name.textContent = cleanTitle + '.mp4';
+      name.textContent = label + '.mp4';
 
       a.appendChild(thumb);
       a.appendChild(name);
@@ -133,7 +145,7 @@
     quick.className = 'quicklook ql-effect-4';
     quick.innerHTML =
       '<div class="ql-card">' +
-      '<button class="ql-close" type="button" aria-label="关闭">×</button>' +
+      '<button class="ql-close" type="button" aria-label="' + esc(tr('desk.ql.close', 'Закрыть')) + '">×</button>' +
       '<div class="ql-stage"></div>' +
       '<div class="ql-meta"><b></b><span></span></div>' +
       '</div>';
@@ -160,7 +172,7 @@
       stage.appendChild(img);
     }
     q.querySelector('.ql-meta b').textContent = file.dataset.title || file.querySelector('.fname').textContent;
-    q.querySelector('.ql-meta span').textContent = file.dataset.platform || '视频';
+    q.querySelector('.ql-meta span').textContent = platformLabel(file.dataset.platform);
     q.classList.add('open');
   }
   function closeQuick() {
@@ -172,7 +184,7 @@
     if (menu) return menu;
     menu = document.createElement('div');
     menu.className = 'desk-menu';
-    menu.innerHTML = '<button type="button" data-act="delete">删除</button>';
+    menu.innerHTML = '<button type="button" data-act="delete">' + esc(tr('desk.menu.delete', 'Удалить')) + '</button>';
     menu.addEventListener('click', function (e) {
       var b = e.target.closest('button[data-act="delete"]');
       if (!b || !menuTarget) return;

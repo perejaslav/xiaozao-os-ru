@@ -12,8 +12,10 @@
   --os-ink-3: #8d8597;
   --os-line: rgba(28, 24, 34, 0.12);
   --os-win: rgba(250, 248, 252, 0.94);
-  --font: "Noto Sans SC", system-ui, sans-serif;
-  --mono: "SF Mono", ui-monospace, Menlo, monospace;
+  /* Кириллица: Noto Sans SC кириллицу не содержит, поэтому ниже идут
+     системные/PT-шрифты с кириллицей. order: SC -> Noto Sans (latin+cyr) -> PT Sans -> Segoe UI. */
+  --font: "Noto Sans SC", "Noto Sans", "PT Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
 *::-webkit-scrollbar { display: none; width: 0; height: 0; }

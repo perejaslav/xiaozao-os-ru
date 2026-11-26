@@ -1,4 +1,4 @@
-// 小灶 iOS · App 视图与导航（iOS 26 风格）
+// Сяоцзао iOS · экраны приложений и навигация (стиль iOS 26)
 (function () {
   var CONTENT = window.XZContent || {};
   var BILI = 'https://space.bilibili.com/3537118131391269';
@@ -6,8 +6,19 @@
   var CALL_CONNECTED = 'os/media/call-connected.m4a?v=20260612';
   var CALL_DIALING_MS = 7660;
   var CALL_CONNECTED_MS = 6640;
+  function tr(key, fallback) {
+    return window.xztr ? window.xztr(key, fallback) : fallback;
+  }
+  function pick(prefix, n) {
+    return window.XZI18N ? window.XZI18N.pick(prefix, n) : String(n);
+  }
+  var PLATFORM_KEYS = { 'B站': 'platform.bilibili', '抖音': 'platform.douyin', '小红书': 'platform.xiaohongshu', '飞书': 'platform.feishu' };
+  function platformLabel(p) {
+    var key = PLATFORM_KEYS[p];
+    return key ? tr(key, p) : (p || tr('desk.platform.video', 'Видео'));
+  }
 
-  /* ---------- 小图标（currentColor SVG） ---------- */
+  /* ---------- Мелкие иконки (currentColor SVG) ---------- */
   var SVG = {
     mag: '<svg viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.8"></circle><path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>',
     mic: '<svg viewBox="0 0 20 20" fill="none"><rect x="7" y="2" width="6" height="10" rx="3" fill="currentColor"></rect><path d="M4.5 9.5a5.5 5.5 0 0 0 11 0M10 15v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"></path></svg>',
@@ -29,16 +40,24 @@
     })()
   };
 
-  var VIDEOS = (CONTENT.videos && CONTENT.videos.length) ? CONTENT.videos : [
+  var VIDEOS = ((CONTENT.videos && CONTENT.videos.length) ? CONTENT.videos : [
     { title: 'Claude design 可交互 PPT', url: BILI, cover: '', platform: 'B站' },
     { title: '三招去除图片 AI 味', url: BILI, cover: '', platform: 'B站' }
-  ];
-  var DOCS = (CONTENT.docs && CONTENT.docs.length) ? CONTENT.docs : [
+  ]).map(function (v, i) {
+    return { title: tr('video.' + (i + 1), v.title), url: v.url, cover: v.cover, platform: v.platform };
+  });
+  var DOCS = ((CONTENT.docs && CONTENT.docs.length) ? CONTENT.docs : [
     { title: 'Claude Design 可交互 PPT 实操手册', url: '#', source: '飞书' },
     { title: '三招去除图片 AI 味 操作清单', url: '#', source: '飞书' }
-  ];
+  ]).map(function (d, i) {
+    return {
+      title: tr('doc.title.' + (i + 1), d.title),
+      url: d.url,
+      source: tr('doc.source.' + (i + 1), d.source || '')
+    };
+  });
   var CASES = window.XZCases || {};
-  var TEAM = [
+  var TEAM_RAW = [
     { id: 'dashi', nm: '大师', letter: 'D', role: '创始人 · AI 实战应用探索家', av: 'os/avatars/dashi.jpg',
       bio: '擅长将复杂技术转化为实用工作流，把「看不懂」变成「马上用」。' },
     { id: 'hongdou', nm: '红豆', letter: 'H', role: '创始人 · 运营操盘手', av: 'os/avatars/hongdou.png',
@@ -46,24 +65,36 @@
     { id: 'jadon7', nm: 'Jadon7', letter: 'J', role: '合伙人 · 多面体技术极客', av: 'os/avatars/jadon7.png',
       bio: '热衷于全球 AI 工具的体验、测评与教程，新工具第一手开箱。' }
   ];
+  var TEAM = TEAM_RAW.map(function (m) {
+    return {
+      id: m.id,
+      letter: m.letter,
+      av: m.av,
+      nm: tr('team.' + m.id + '.name', m.nm),
+      role: tr('team.' + m.id + '.role', m.role),
+      bio: tr('team.' + m.id + '.bio', m.bio)
+    };
+  });
   var FX = {
     fable: {
       wm: 'Claude Fable',
-      h: '用 Claude Fable，<em>把故事做成作品</em>',
-      cases: CASES.fable || []
+      heroA: 'web.hero.fable.a', heroB: 'web.hero.fable.b',
+      heroFallback: ['用 Claude Fable，', '把故事做成作品'],
+      cases: (CASES.fable || []).map(function (c, i) { return { title: tr('case.fable.' + (i + 1), c.title), cover: c.cover, url: c.url }; })
     },
     design: {
       wm: 'Claude Design',
-      h: '用 Claude Design，<em>把灵感做成界面</em>',
-      cases: CASES.design || []
+      heroA: 'web.hero.design.a', heroB: 'web.hero.design.b',
+      heroFallback: ['用 Claude Design，', '把灵感做成界面'],
+      cases: (CASES.design || []).map(function (c, i) { return { title: tr('case.design.' + (i + 1), c.title), cover: c.cover, url: c.url }; })
     }
   };
   var QRS = {
-    wechat: { t: '微信 · 进群', img: 'os/qrs/wechat.png', hint: '微信扫一扫，进群开小灶' },
-    shipinhao: { t: '视频号', img: 'os/qrs/shipinhao.png', hint: '微信扫一扫，关注视频号' }
+    wechat: { t: tr('app.qrwx.title', 'WeChat · Вход в группу'), img: 'os/qrs/wechat.png', hint: tr('qr.wechat.hint', '') },
+    shipinhao: { t: tr('dock.shipinhao.alt', 'Видеоканал'), img: 'os/qrs/shipinhao.png', hint: tr('qr.shipinhao.hint', '') }
   };
 
-  /* ---------- 模板 ---------- */
+  /* ---------- Шаблоны ---------- */
   function nav(backLabel, title) {
     return '<header class="nav"><button class="back" data-back><span class="chev">‹</span> ' + backLabel + '</button><b class="ttl">' + title + '</b></header>';
   }
@@ -72,64 +103,64 @@
     var rows = VIDEOS.map(function (v) {
       return '<a class="grow" href="' + attr(v.url) + '" target="_blank" rel="noopener">' +
         '<span class="vthumb">' + (v.cover ? '<img src="' + attr(v.cover) + '" alt="" />' : '') + '<span class="play">▶</span></span>' +
-        '<span><span class="fn">' + esc(v.title) + '</span><span class="fmeta">' + esc(v.platform || '视频') + ' · 完整教程</span></span>' +
+        '<span><span class="fn">' + esc(v.title) + '</span><span class="fmeta">' + esc(window.XZI18N ? window.XZI18N.t('ios.videos.meta', { platform: platformLabel(v.platform) }) : platformLabel(v.platform)) + '</span></span>' +
         '<span class="chev">›</span></a>';
     }).join('');
-    return '<div class="scr" id="scr-videos">' + nav('主屏', '教程视频') +
-      '<div class="scr-body"><h1 class="big-title">教程视频</h1>' +
-      '<p class="glabel">' + VIDEOS.length + ' 个视频 · 原始平台链接</p>' +
+    return '<div class="scr" id="scr-videos">' + nav(tr('ios.nav.home', 'Главный экран'), tr('ios.videos.title', 'Уроки')) +
+      '<div class="scr-body"><h1 class="big-title">' + esc(tr('ios.videos.title', 'Уроки')) + '</h1>' +
+      '<p class="glabel">' + esc(pick('ios.videos.count', VIDEOS.length)) + '</p>' +
       '<div class="glist">' + rows + '</div></div></div>';
   }
-  /* 文档 → 文件 App */
+  /* Документы → приложение «Файлы» */
   function docScr() {
     var rows = DOCS.map(function (d) {
       return '<a class="fl-row" href="' + attr(d.url) + '" target="_blank" rel="noopener">' +
         '<span class="fl-doc"></span>' +
-        '<span class="col"><span class="fn">' + esc(d.title) + '</span><span class="fmeta">飞书文档 · ' + esc(d.source || '教程') + '</span></span>' +
+        '<span class="col"><span class="fn">' + esc(d.title) + '</span><span class="fmeta">' + esc(window.XZI18N ? window.XZI18N.t('ios.docs.meta', { source: d.source || tr('finder.source.feishu', 'Feishu') }) : d.source) + '</span></span>' +
         '<span class="dl">' + SVG.cloud + '</span></a>';
     }).join('');
     return '<div class="scr files" id="scr-doc">' +
       '<button class="fl-float lft" data-back>‹</button>' +
       '<button class="fl-float rgt" type="button">⋯</button>' +
       '<div class="scr-body">' +
-      '<h1 class="fl-title">文档</h1>' +
-      '<div class="fl-search">' + SVG.mag + ' 搜索 <span class="mic">' + SVG.mic + '</span></div>' +
+      '<h1 class="fl-title">' + esc(tr('ios.docs.title', 'Документы')) + '</h1>' +
+      '<div class="fl-search">' + SVG.mag + ' ' + esc(tr('ios.docs.search', 'Поиск')) + ' <span class="mic">' + SVG.mic + '</span></div>' +
       rows +
-      '<p class="fl-count">' + DOCS.length + ' 项</p>' +
+      '<p class="fl-count">' + esc(pick('ios.docs.count', DOCS.length)) + '</p>' +
       '</div>' +
       '<div class="fl-tabwrap"><div class="fl-tabbar">' +
-      '<button class="fl-tab" type="button">' + SVG.clock + '最近项目</button>' +
-      '<button class="fl-tab on" type="button">' + SVG.folderP + '文档</button>' +
-      '<button class="fl-tab" type="button">' + SVG.folder + '浏览</button>' +
+      '<button class="fl-tab" type="button">' + SVG.clock + esc(tr('ios.docs.tab.recent', 'Недавние')) + '</button>' +
+      '<button class="fl-tab on" type="button">' + SVG.folderP + esc(tr('ios.docs.tab.docs', 'Документы')) + '</button>' +
+      '<button class="fl-tab" type="button">' + SVG.folder + esc(tr('ios.docs.tab.browse', 'Обзор')) + '</button>' +
       '</div></div></div>';
   }
-  /* 团队 → 联系人列表 */
+  /* Команда → список контактов */
   function teamScr() {
     var body = TEAM.map(function (m) {
       return '<p class="sec-letter">' + m.letter + '</p>' +
-        '<button class="cts-row" data-member="' + m.id + '"><img src="' + m.av + '" alt="" /><span class="nm">' + m.nm + '</span></button>';
+        '<button class="cts-row" data-member="' + m.id + '"><img src="' + m.av + '" alt="" /><span class="nm">' + esc(m.nm) + '</span></button>';
     }).join('');
     var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('').join('<br>');
     return '<div class="scr cts" id="scr-team">' +
       '<button class="fl-float lft" data-back>‹</button>' +
-      '<p class="cts-title">联系人</p>' +
+      '<p class="cts-title">' + esc(tr('ios.team.title', 'Контакты')) + '</p>' +
       '<button class="fl-float rgt" type="button">＋</button>' +
       '<div class="scr-body">' +
-      '<div class="me-row"><img src="os/avatars/dashi.jpg" alt="" /><span><span class="nm">大师的AI小灶</span><span class="sub">我的名片</span></span></div>' +
+      '<div class="me-row"><img src="os/avatars/dashi.jpg" alt="" /><span><span class="nm">' + esc(tr('ios.team.me', 'AI-кухня мастера')) + '</span><span class="sub">' + esc(tr('ios.team.meSub', 'Моя карточка')) + '</span></span></div>' +
       body +
-      '<p class="fl-count">3 张名片</p></div>' +
+      '<p class="fl-count">' + esc(pick('ios.team.count', TEAM.length)) + '</p></div>' +
       '<div class="alpha-index">' + alpha + '</div>' +
       '<div class="fl-tabwrap"><div class="fl-tabbar">' +
-      '<button class="fl-tab" type="button">' + SVG.phone + '通话</button>' +
-      '<button class="fl-tab on" type="button">' + SVG.person + '通讯录</button>' +
-      '<button class="fl-tab" type="button">' + SVG.keypad + '拨号键盘</button>' +
+      '<button class="fl-tab" type="button">' + SVG.phone + esc(tr('ios.team.tab.calls', 'Звонки')) + '</button>' +
+      '<button class="fl-tab on" type="button">' + SVG.person + esc(tr('ios.team.tab.contacts', 'Контакты')) + '</button>' +
+      '<button class="fl-tab" type="button">' + SVG.keypad + esc(tr('ios.team.tab.keypad', 'Клавиатура')) + '</button>' +
       '</div><button class="fl-circle" type="button">' + SVG.mag + '</button></div></div>';
   }
-  /* 名片 → 液态玻璃 */
+  /* Карточка → «жидкое стекло» */
   function teamDetailScr() {
     return '<div class="scr ct-glass" id="scr-team-d">' +
       '<button class="fl-float lft" data-back>‹</button>' +
-      '<button class="fl-float rgt pill" type="button">编辑</button>' +
+      '<button class="fl-float rgt pill" type="button">' + esc(tr('contacts.edit', 'Правка')) + '</button>' +
       '<div class="cg-body" id="ct-detail-body"></div></div>';
   }
   function fillDetail(m) {
@@ -137,18 +168,18 @@
     body.classList.remove('is-calling');
     var callAttr = m.id === 'dashi' ? ' data-ios-call="' + m.id + '"' : '';
     body.innerHTML =
-      '<img class="cg-avatar" src="' + m.av + '" alt="' + m.nm + '" />' +
-      '<h2 class="cg-name">' + m.nm + '</h2><p class="cg-role">' + m.role + '</p>' +
+      '<img class="cg-avatar" src="' + m.av + '" alt="' + attr(m.nm) + '" />' +
+      '<h2 class="cg-name">' + esc(m.nm) + '</h2><p class="cg-role">' + esc(m.role) + '</p>' +
       '<div class="cg-acts">' +
-      '<button type="button" aria-label="信息"><img src="os/icons/ctl/ct-msg.svg" alt="" /></button>' +
-      '<button type="button" aria-label="拨打' + attr(m.nm) + '"' + callAttr + '><img src="os/icons/ctl/ct-call.svg" alt="" /></button>' +
-      '<button type="button" aria-label="视频"><img src="os/icons/ctl/ct-video.svg" alt="" /></button>' +
-      '<button type="button" aria-label="邮件"><img src="os/icons/ctl/ct-mail.svg" alt="" /></button>' +
+      '<button type="button" aria-label="' + attr(tr('contacts.aria.info', 'Информация')) + '"><img src="os/icons/ctl/ct-msg.svg" alt="" /></button>' +
+      '<button type="button" aria-label="' + attr(tr('contacts.aria.call', m.nm)) + '"' + callAttr + '><img src="os/icons/ctl/ct-call.svg" alt="" /></button>' +
+      '<button type="button" aria-label="' + attr(tr('contacts.aria.video', 'Видео')) + '"><img src="os/icons/ctl/ct-video.svg" alt="" /></button>' +
+      '<button type="button" aria-label="' + attr(tr('contacts.aria.mail', 'Почта')) + '"><img src="os/icons/ctl/ct-mail.svg" alt="" /></button>' +
       '</div>' +
-      '<div class="cg-card"><div class="cg-photo"><img src="' + m.av + '" alt="" /><span class="t">联系人照片与海报</span><span class="chev">›</span></div></div>' +
+      '<div class="cg-card"><div class="cg-photo"><img src="' + m.av + '" alt="" /><span class="t">' + esc(tr('contacts.photoPoster', 'Фото и постер контакта')) + '</span><span class="chev">›</span></div></div>' +
       '<div class="cg-card">' +
-      '<div class="cg-kv"><p class="k">简介</p><p class="v">' + m.bio + '</p></div>' +
-      '<div class="cg-kv"><p class="k">坐标</p><p class="v">北京 · 来自头部互联网大厂</p></div>' +
+      '<div class="cg-kv"><p class="k">' + esc(tr('contacts.bio', 'О себе')) + '</p><p class="v">' + esc(m.bio) + '</p></div>' +
+      '<div class="cg-kv"><p class="k">' + esc(tr('contacts.location', 'Локация')) + '</p><p class="v">' + esc(tr('contacts.location.value', '')) + '</p></div>' +
       '</div>';
   }
   var iosCallAudio = null;
@@ -177,10 +208,10 @@
     body.innerHTML =
       '<div class="cg-call ' + cls + '">' +
       '<div class="cg-call-orb"><span></span><span></span><img src="' + m.av + '" alt="" /></div>' +
-      '<p class="cg-call-chip">小灶音频通话</p>' +
-      '<h2>' + m.nm + '</h2>' +
-      '<p class="cg-call-status">' + statusText + '</p>' +
-      '<button class="cg-hang" type="button" data-ios-hang aria-label="挂断">' + SVG.phone + '</button>' +
+      '<p class="cg-call-chip">' + esc(tr('contacts.call.chip', 'Аудиозвонок Сяоцзао')) + '</p>' +
+      '<h2>' + esc(m.nm) + '</h2>' +
+      '<p class="cg-call-status">' + esc(statusText) + '</p>' +
+      '<button class="cg-hang" type="button" data-ios-hang aria-label="' + attr(tr('contacts.call.hang', 'Завершить вызов')) + '">' + SVG.phone + '</button>' +
       '</div>';
   }
   function hangUpIOS(run) {
@@ -188,7 +219,7 @@
     iosCallRun += 1;
     stopIOSCall();
     if (iosCallMember) {
-      fillCall(iosCallMember, '已挂断', 'ended');
+      fillCall(iosCallMember, tr('contacts.call.status.ended', 'Завершён'), 'ended');
       iosCallTimer = setTimeout(function () { fillDetail(iosCallMember); }, 900);
     }
   }
@@ -221,9 +252,9 @@
     var run = iosCallRun;
     iosCallMember = m;
     stopIOSCall();
-    fillCall(m, '正在呼叫...', 'dialing');
+    fillCall(m, tr('contacts.call.status.dialing', 'Вызов…'), 'dialing');
     playIOSClip(new Audio(CALL_DIALING), run, CALL_DIALING_MS, function () {
-      fillCall(m, '已接通', 'connected');
+      fillCall(m, tr('contacts.call.status.connected', 'Соединено'), 'connected');
       playIOSClip(new Audio(CALL_CONNECTED), run, CALL_CONNECTED_MS, function () { hangUpIOS(run); });
     });
   }
@@ -235,45 +266,45 @@
         '<span class="row"><span class="idx">CASE ' + String(i + 1).padStart(2, '0') + '</span><span class="nm">' + esc(c.title) + '</span><span class="go">→</span></span></a>';
     }).join('');
     return '<div class="cs-wrap pane-' + key + '" data-pane="' + key + '"' + (key === 'fable' ? '' : ' style="display:none"') + '>' +
-      '<div class="cs-brand"><img src="os/icons/claude.svg" alt="" /><b>' + f.wm + '</b><span class="x">×</span><span class="by">大师的AI小灶</span></div>' +
-      '<h1 class="cs-h-m">' + f.h + '</h1>' + cases + '</div>';
+      '<div class="cs-brand"><img src="os/icons/claude.svg" alt="" /><b>' + f.wm + '</b><span class="x">×</span><span class="by">' + esc(tr('web.by', 'AI-кухня мастера')) + '</span></div>' +
+      '<h1 class="cs-h-m">' + esc(tr(f.heroA, f.heroFallback[0])) + '<em>' + esc(tr(f.heroB, f.heroFallback[1])) + '</em></h1>' + cases + '</div>';
   }
   function fxScr() {
-    return '<div class="scr safari" id="scr-fx">' + nav('主屏', '上线效果') +
+    return '<div class="scr safari" id="scr-fx">' + nav(tr('ios.nav.home', 'Главный экран'), tr('ios.fx.title', 'Кейсы')) +
       '<div class="scr-body">' +
       '<div class="seg"><button class="on" data-seg="fable">Claude Fable</button><button data-seg="design">Claude Design</button></div>' +
       fxPane('fable') + fxPane('design') +
       '</div></div>';
   }
   function termScr() {
-    return '<div class="scr term" id="scr-term">' + nav('主屏', 'xiaozao —— -zsh') +
+    return '<div class="scr term" id="scr-term">' + nav(tr('ios.nav.home', 'Главный экран'), tr('ios.term.title', 'xiaozao —— -zsh')) +
       '<div class="scr-body term-out-m" id="term-out">' +
       '<p class="ln"><span class="prompt">xiaozao@os</span> <span class="dim">~</span> $ <span class="cmd">xiaozao --about</span></p>' +
-      '<p class="term-logo">██ 大师的AI小灶 ██  v2026.06</p>' +
-      '<p class="ln">定位  <span class="hl">面向职场人群的 AI 实战内容品牌</span></p>' +
-      '<p class="ln">理念  我们不是理论派，而是实战派。</p>' +
-      '<p class="ln">      不教大道理，<span class="hl">只传实用技</span>。</p>' +
+      '<p class="term-logo">' + esc(tr('term.logo', '')) + '</p>' +
+      '<p class="ln">' + esc(tr('term.pos.label', '')) + '  <span class="hl">' + esc(tr('term.pos.value', '')) + '</span></p>' +
+      '<p class="ln">' + esc(tr('term.philosophy.label', '')) + '  ' + esc(tr('term.philosophy.value', '')) + '</p>' +
+      '<p class="ln">      ' + esc(tr('term.philosophy.value2', '')) + '</p>' +
       '<p class="ln">&nbsp;</p>' +
-      '<p class="ln"><span class="dim"># 输入 help 查看可用命令，回车执行。</span></p>' +
+      '<p class="ln"><span class="dim">' + esc(tr('term.hint', '')) + '</span></p>' +
       '</div>' +
-      '<div class="term-line-m"><span class="prompt">xiaozao@os</span><span class="dim">&nbsp;~ $</span><input id="term-in" type="text" autocomplete="off" spellcheck="false" aria-label="终端输入" /></div></div>';
+      '<div class="term-line-m"><span class="prompt">xiaozao@os</span><span class="dim">&nbsp;~ $</span><input id="term-in" type="text" autocomplete="off" spellcheck="false" aria-label="' + attr(tr('term.aria.input', '')) + '" /></div></div>';
   }
 
-  /* ---------- 终端命令 ---------- */
+  /* ---------- Команды терминала ---------- */
   function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   var QUN = 'https://u.wechat.com/MEW2EgIp6wvap_Y8C3Zuzzk';
   var CMDS = {
-    help: ['可用命令：', '  about    品牌定位与理念', '  stats    关键数据', '  roadmap  2026 关键目标', '  find     各平台入口', '  clear    清屏'],
-    about: ['定位  <span class="hl">面向职场人群的 AI 实战内容品牌</span>', '理念  不教大道理，<span class="hl">只传实用技</span>。', '<span class="dim"># 只要敢突破，就是了不起。</span>'],
-    stats: ['<span class="ok">✓</span> 全网粉丝      50,000+', '<span class="ok">✓</span> 精选实战教程  10+', '<span class="ok">✓</span> 同步更新平台  5 个'],
-    roadmap: ['[1] 完整的「AI小灶」内容体系 — 覆盖 12+ 职场场景', '[2] 知识共创社区 — 经验交流与能力进阶'],
-    find: ['B站   <a class="hl" href="' + BILI + '" target="_blank" rel="noopener">完整视频教程</a>', '微信   <a class="hl" href="' + QUN + '" target="_blank" rel="noopener">和我们一起开小灶</a>']
+    help: [tr('term.help.header', ''), tr('term.help.about', ''), tr('term.help.stats', ''), tr('term.help.roadmap', ''), tr('term.help.find', ''), tr('term.help.clear', '')],
+    about: [esc(tr('term.pos.label', '')) + '  <span class="hl">' + esc(tr('term.pos.value', '')) + '</span>', esc(tr('term.philosophy.label', '')) + '  ' + esc(tr('term.philosophy.value2', '')) + '  <span class="hl">' + esc(tr('term.motto', '')) + '</span>'],
+    stats: ['<span class="ok">✓</span> ' + esc(tr('term.stats.fans', '')), '<span class="ok">✓</span> ' + esc(tr('term.stats.tutorials', '')), '<span class="ok">✓</span> ' + esc(tr('term.stats.platforms', ''))],
+    roadmap: [esc(tr('term.roadmap.1', '')), esc(tr('term.roadmap.2', ''))],
+    find: [esc(tr('term.find.bilibili', '')) + '<a class="hl" href="' + BILI + '" target="_blank" rel="noopener">' + esc(tr('term.find.bilibili.link', '')) + '</a>', esc(tr('term.find.wechat', '')) + '<a class="hl" href="' + QUN + '" target="_blank" rel="noopener">' + esc(tr('term.find.wechat.link', '')) + '</a>']
   };
   function runCmd(v, out) {
     var cmd = v.toLowerCase().replace(/^xiaozao\s+--?/, '');
     if (cmd === 'clear') { out.innerHTML = ''; return; }
-    var lines = /^sudo\b/.test(cmd) ? ['权限不足：灶台只有大师能动。'] :
-      CMDS[cmd] || ['zsh: command not found: ' + esc(v) + '<span class="dim">（试试 help）</span>'];
+    var lines = /^sudo\b/.test(cmd) ? [esc(tr('term.sudo', ''))] :
+      CMDS[cmd] || [esc(window.XZI18N ? window.XZI18N.t('term.notfound', { cmd: v }) : 'zsh: command not found: ' + v) + '<span class="dim">' + esc(tr('term.hintShort', '')) + '</span>'];
     lines.forEach(function (l) {
       var p = document.createElement('p');
       p.className = 'ln';
@@ -282,24 +313,24 @@
     });
   }
 
-  /* ---------- 二维码弹层（微信 / 视频号） ---------- */
+  /* ---------- Слой QR-кода (WeChat / видеоканал) ---------- */
   function showQr(key) {
     var q = QRS[key];
     if (!q) return;
     var mask = document.createElement('div');
     mask.className = 'qr-mask';
     mask.innerHTML = '<div class="qr-card">' +
-      '<h3>' + q.t + '</h3>' +
-      '<img class="qr-img" src="' + q.img + '" alt="' + q.t + ' 二维码" />' +
-      '<p class="hint">' + q.hint + '</p>' +
-      '<button class="close" type="button">关闭</button></div>';
+      '<h3>' + esc(q.t) + '</h3>' +
+      '<img class="qr-img" src="' + q.img + '" alt="' + attr(q.t + tr('qr.altSuffix', '')) + '" />' +
+      '<p class="hint">' + esc(q.hint) + '</p>' +
+      '<button class="close" type="button">' + esc(tr('qr.close', 'Закрыть')) + '</button></div>';
     mask.addEventListener('click', function (e) {
       if (e.target === mask || e.target.closest('.close')) mask.remove();
     });
     document.body.appendChild(mask);
   }
 
-  /* ---------- 装载 & 导航栈 ---------- */
+  /* ---------- Монтирование экранов и стек навигации ---------- */
   var screens = document.getElementById('screens');
   screens.innerHTML = videosScr() + docScr() + teamScr() + teamDetailScr() + fxScr() + termScr();
 

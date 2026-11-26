@@ -358,7 +358,7 @@
   white-space: nowrap;
 }
 .cs-h {
-  font-family: "Noto Serif SC", serif;
+  font-family: "Noto Serif SC", "Noto Serif", "PT Serif", Georgia, serif;
   font-size: 29px;
   font-weight: 900;
   color: #201d16;
@@ -634,3 +634,25 @@
   .web-cases { grid-template-columns: 1fr; }
   .cs-grid { grid-template-columns: 1fr; }
 }
+
+
+/* Тост-уведомление (копирование ссылки и т.п.). Текст ставится через textContent. */
+.xz-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 88px;
+  z-index: 9999;
+  max-width: min(420px, calc(100vw - 48px));
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(20, 18, 26, 0.9);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 10px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.xz-toast.on { opacity: 1; transform: translate(-50%, 0); }

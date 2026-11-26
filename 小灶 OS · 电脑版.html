@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>小灶 OS · 大师的AI小灶</title>
+<title>Сяоцзао OS · AI-кухня мастера</title>
 <link rel="icon" type="image/png" href="os/avatars/dashi-favicon.png?v=20260612" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&amp;family=Noto+Serif+SC:wght@700;900&amp;display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700;900&amp;family=Noto+Serif+SC:wght@700;900&amp;family=Noto+Serif:wght@700;900&amp;display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="os/os.css?v=20260629-2" />
 <link rel="stylesheet" href="os/appstyles.css?v=20260614-1" />
 <script>
-  // 设备路由：手机访问时进入 iOS 版（加 ?mac=1 可强制留在桌面版）
+  // Маршрутизация по устройству: на телефоне открываем iOS-версию (?mac=1 оставляет десктоп)
   (function () {
     var isMobile = /iPhone|iPod|Android.*Mobile/i.test(navigator.userAgent) || window.matchMedia('(max-width: 740px)').matches;
     if (isMobile && !/[?&]mac=1/.test(location.search)) {
@@ -19,231 +19,187 @@
   })();
 </script>
 </head>
-<body class="is-locked">
+<body class="is-locked" data-title-key="meta.title.desktop">
 
-<!-- ===================== 锁屏 ===================== -->
-<div class="lockscreen" id="lockscreen" data-screen-label="锁屏">
+<!-- ===================== Экран блокировки ===================== -->
+<div class="lockscreen" id="lockscreen" data-screen-label="Экран блокировки">
   <div class="lock-date" id="lock-date">--</div>
   <div class="lock-time" id="lock-time">--:--</div>
   <div class="lock-user">
-    <img src="os/avatars/dashi.jpg" alt="大师" />
-    <p>大师的AI小灶</p>
-    <button class="lock-enter" id="lock-enter" type="button">进入小灶</button>
+    <img src="os/avatars/dashi.jpg" alt="Мастер" data-i18n-attr="alt:lockscreen.avatarAlt" />
+    <p data-i18n="app.brand">AI-кухня мастера</p>
+    <button class="lock-enter" id="lock-enter" type="button" data-i18n="lockscreen.enter">Войти</button>
   </div>
 </div>
 
-<!-- ===================== 菜单栏 ===================== -->
-<header class="menubar" data-screen-label="菜单栏">
+<!-- ===================== Строка меню ===================== -->
+<header class="menubar" data-screen-label="Строка меню">
   <svg class="logo-ic" viewBox="0 0 16 16" aria-label="logo"><path d="M8.2 1.2c.4 2.2-.7 3.4-1.8 4.7C5.3 7.2 4.4 8.5 4.4 10.1A3.8 3.8 0 0 0 8.2 13.9a3.8 3.8 0 0 0 3.7-3.8c0-1.2-.5-2.2-1.2-3.2-.2.7-.6 1.3-1.3 1.7.3-2.3-.5-4.6-1.2-7.4z" fill="#fff"></path></svg>
-  <span class="app-name">小灶 OS</span>
-  <span class="menu">文件</span>
-  <span class="menu">编辑</span>
-  <span class="menu">显示</span>
-  <span class="menu">前往</span>
-  <span class="menu">帮助</span>
+  <span class="app-name" data-i18n="app.name">Сяоцзао OS</span>
+  <span class="menu" data-i18n="menubar.file">Файл</span>
+  <span class="menu" data-i18n="menubar.edit">Правка</span>
+  <span class="menu" data-i18n="menubar.view">Вид</span>
+  <span class="menu" data-i18n="menubar.go">Переход</span>
+  <span class="menu" data-i18n="menubar.help">Справка</span>
   <span class="spacer"></span>
   <span class="status" aria-hidden="true">
     <svg viewBox="0 0 16 12" width="16" height="12"><path d="M8 10.8a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6z" fill="#fff"></path><path d="M5.3 8.3a3.9 3.9 0 0 1 5.4 0" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"></path><path d="M3 6a7.2 7.2 0 0 1 10 0" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"></path><path d="M0.8 3.7a10.4 10.4 0 0 1 14.4 0" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"></path></svg>
     <svg viewBox="0 0 25 12" width="25" height="12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="#fff" opacity="0.5" fill="none"></rect><rect x="2" y="2" width="15" height="8" rx="1.8" fill="#fff"></rect><path d="M23 4v4a2.2 2.2 0 0 0 0-4z" fill="#fff" opacity="0.5"></path></svg>
   </span>
-  <span class="online" id="os-online">在线 1</span>
+  <span class="online" id="os-online">Онлайн: 1</span>
   <span class="clock" id="os-clock">--:--</span>
 </header>
 
-<!-- ===================== 桌面 ===================== -->
-<main class="desktop" data-screen-label="桌面">
+<!-- ===================== Рабочий стол ===================== -->
+<main class="desktop" data-screen-label="Рабочий стол">
 
-  <!-- 视频教程 · 桌面图标 -->
-  <div class="desk-icons" data-screen-label="桌面视频">
-    <a class="desk-file" data-id="v1" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb"><span class="pl">▶</span><span class="dur">08:24</span></span>
-      <span class="fname">Claude design 可交互 PPT.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v2" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#6b2240,#b8265c)"><span class="pl">▶</span><span class="dur">06:12</span></span>
-      <span class="fname">三招去除图片 AI 味.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v3" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#173e5e,#1f5fd0)"><span class="pl">▶</span><span class="dur">05:48</span></span>
-      <span class="fname">AI 配音活人感 3 招.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v4" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#5e2c12,#f06a13)"><span class="pl">▶</span><span class="dur">07:33</span></span>
-      <span class="fname">高级大片感 PPT.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v5" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#123f2c,#1a9d56)"><span class="pl">▶</span><span class="dur">09:05</span></span>
-      <span class="fname">Deepseek 职场七大场景.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v6" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#14323e,#0087c8)"><span class="pl">▶</span><span class="dur">06:57</span></span>
-      <span class="fname">GPT-4o 数据图表.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v7" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#3b1f4e,#8a3fc0)"><span class="pl">▶</span><span class="dur">07:46</span></span>
-      <span class="fname">用分镜搞定影视感.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v8" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#4e3a10,#c9931c)"><span class="pl">▶</span><span class="dur">08:11</span></span>
-      <span class="fname">Deepseek 最好看 PPT.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v9" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#143a3a,#1c9e96)"><span class="pl">▶</span><span class="dur">10:22</span></span>
-      <span class="fname">AI 学习提效 8 法.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v10" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#4a1530,#cf3b76)"><span class="pl">▶</span><span class="dur">09:38</span></span>
-      <span class="fname">Lovart 设计不求人.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v11" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#26324e,#5871c9)"><span class="pl">▶</span><span class="dur">06:40</span></span>
-      <span class="fname">教程标题待补 01.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v12" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#503214,#d07b27)"><span class="pl">▶</span><span class="dur">05:55</span></span>
-      <span class="fname">教程标题待补 02.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v13" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#1c4030,#2fa86a)"><span class="pl">▶</span><span class="dur">07:08</span></span>
-      <span class="fname">教程标题待补 03.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v14" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#42173d,#a93b9d)"><span class="pl">▶</span><span class="dur">08:47</span></span>
-      <span class="fname">教程标题待补 04.mp4</span>
-    </a>
-    <a class="desk-file" data-id="v15" href="https://b23.tv/UwMwtD0" target="_blank" rel="noopener">
-      <span class="desk-thumb" style="background:linear-gradient(135deg,#14303e,#2596be)"><span class="pl">▶</span><span class="dur">06:25</span></span>
-      <span class="fname">教程标题待补 05.mp4</span>
-    </a>
-  </div>
+  <!-- Видеоуроки · значки на столе -->
+  <!-- Значки стола рендерит os/desk.js из os/content.js (единый источник данных). -->
+  <div class="desk-icons" data-screen-label="Видео на столе"></div>
 
   <video class="desktop-sticker" src="os/media/sticker-cutout-person.webm?v=20260612-keyed" autoplay loop muted playsinline preload="auto" aria-hidden="true"></video>
 
   <div class="desktop-hint"></div>
 </main>
 
-<!-- ===================== Dock ===================== -->
-<nav class="dock" data-screen-label="Dock">
+<!-- ===================== Док ===================== -->
+<nav class="dock" data-screen-label="Док">
   <button class="dock-item" data-app="term" onclick="XZApps.open('term')">
-    <span class="tip">关于小灶 · 终端</span>
-    <span class="dock-icon img"><img src="os/icons/terminal.png" alt="终端" /></span>
+    <span class="tip" data-i18n="dock.term.tip">О проекте · Терминал</span>
+    <span class="dock-icon img"><img src="os/icons/terminal.png" alt="Терминал" data-i18n-attr="alt:dock.term.alt" /></span>
     <span class="dot"></span>
   </button>
   <button class="dock-item" data-app="doc" onclick="XZApps.open('doc')">
-    <span class="tip">文档 · 访达</span>
-    <span class="dock-icon img"><img src="os/icons/finder.png" alt="访达" /></span>
+    <span class="tip" data-i18n="dock.doc.tip">Документы · Файлы</span>
+    <span class="dock-icon img"><img src="os/icons/finder.png" alt="Файлы" data-i18n-attr="alt:dock.doc.alt" /></span>
     <span class="dot"></span>
   </button>
   <button class="dock-item" data-app="fx" onclick="XZApps.open('fx')">
-    <span class="tip">上线效果 · 浏览器</span>
-    <span class="dock-icon img"><img src="os/icons/safari.png" alt="Safari" /></span>
+    <span class="tip" data-i18n="dock.fx.tip">Кейсы · Браузер</span>
+    <span class="dock-icon img"><img src="os/icons/safari.png" alt="Safari" data-i18n-attr="alt:dock.fx.alt" /></span>
     <span class="dot"></span>
   </button>
   <button class="dock-item" data-app="team" onclick="XZApps.open('team')">
-    <span class="tip">团队 · 通讯录</span>
-    <span class="dock-icon img"><img src="os/icons/contacts.png" alt="通讯录" /></span>
+    <span class="tip" data-i18n="dock.team.tip">Команда · Контакты</span>
+    <span class="dock-icon img"><img src="os/icons/contacts.png" alt="Контакты" data-i18n-attr="alt:dock.team.alt" /></span>
     <span class="dot"></span>
   </button>
   <span class="dock-sep"></span>
   <a class="dock-item" href="https://www.douyin.com/user/MS4wLjABAAAAohe8JB4RvITJitJ69b7cV4NTaYTMYrVI43C-3SUnPPc" target="_blank" rel="noopener">
-    <span class="tip">抖音</span>
-    <span class="dock-icon img"><img src="os/icons/douyin.png" alt="抖音" /></span>
+    <span class="tip" data-i18n="dock.douyin.tip">Douyin</span>
+    <span class="dock-icon img"><img src="os/icons/douyin.png" alt="Douyin" data-i18n-attr="alt:dock.douyin.alt" /></span>
     <span class="dot"></span>
   </a>
   <a class="dock-item" href="https://www.xiaohongshu.com/user/profile/62e0c2bb000000001501408c?xsec_token=ABrZskc1MUcZWWuuMx7Fw52G80e06vkIAPUsQT_QZQ8nE%3D&xsec_source=pc_search" target="_blank" rel="noopener">
-    <span class="tip">小红书</span>
-    <span class="dock-icon img"><img src="os/icons/redbook.png" alt="小红书" /></span>
+    <span class="tip" data-i18n="dock.redbook.tip">Xiaohongshu</span>
+    <span class="dock-icon img"><img src="os/icons/redbook.png" alt="Xiaohongshu" data-i18n-attr="alt:dock.redbook.alt" /></span>
     <span class="dot"></span>
   </a>
   <a class="dock-item" href="https://space.bilibili.com/3537118131391269" target="_blank" rel="noopener">
-    <span class="tip">B站 · 完整教程</span>
-    <span class="dock-icon img"><img src="os/icons/bilibili.png" alt="B站" /></span>
+    <span class="tip" data-i18n="dock.bilibili.tip">Bilibili · Все уроки</span>
+    <span class="dock-icon img"><img src="os/icons/bilibili.png" alt="Bilibili" data-i18n-attr="alt:dock.bilibili.alt" /></span>
     <span class="dot"></span>
   </a>
   <button class="dock-item" data-app="qrsph" onclick="XZApps.open('qrsph')">
-    <span class="tip">视频号 · 扫码</span>
-    <span class="dock-icon img"><img src="os/icons/shipinhao.png" alt="视频号" /></span>
+    <span class="tip" data-i18n="dock.shipinhao.tip">Видеоканал · QR-код</span>
+    <span class="dock-icon img"><img src="os/icons/shipinhao.png" alt="Видеоканал" data-i18n-attr="alt:dock.shipinhao.alt" /></span>
     <span class="dot"></span>
   </button>
   <button class="dock-item" data-app="qrwx" onclick="XZApps.open('qrwx')">
-    <span class="tip">微信 · 扫码进群</span>
-    <span class="dock-icon img"><img src="os/icons/wechat.png" alt="微信" /></span>
+    <span class="tip" data-i18n="dock.wechat.tip">WeChat · QR-код группы</span>
+    <span class="dock-icon img"><img src="os/icons/wechat.png" alt="WeChat" data-i18n-attr="alt:dock.wechat.alt" /></span>
     <span class="dot"></span>
   </button>
 </nav>
 
-<!-- ===================== 脚本 ===================== -->
-<script src="image-slot.js"></script>
-<script src="os/wm.js?v=20260614-2"></script>
-<script src="os/content.js?v=20260612-2"></script>
-<script src="os/cases.js?v=20260612-6"></script>
-<script src="os/apps.js?v=20260614-1"></script>
-<script src="os/desk.js?v=20260614-1"></script>
-<script src="os/analytics.js?v=20260629-1"></script>
-<script src="os/presence.js?v=20260629-2"></script>
+<!-- ===================== Скрипты =====================
+     Порядок обязателен: сначала словари ru -> zh, затем рантайм i18n,
+     и только потом прикладные модули. Все теги с defer, поэтому браузер
+     выполняет их строго в порядке документа ещё до DOMContentLoaded.
+     Пути только относительные: страница работает и в корне домена, и в подкаталоге. -->
+<script defer src="os/i18n/dict.ru.js"></script>
+<script defer src="os/i18n/dict.zh.js"></script>
+<script defer src="os/i18n/i18n.js"></script>
+<script defer src="image-slot.js"></script>
+<script defer src="os/wm.js?v=20260614-2"></script>
+<script defer src="os/content.js?v=20260612-2"></script>
+<script defer src="os/cases.js?v=20260612-6"></script>
+<script defer src="os/apps.js?v=20260614-1"></script>
+<script defer src="os/desk.js?v=20260614-1"></script>
+<script defer src="os/analytics.js?v=20260629-1"></script>
+<script defer src="os/presence.js?v=20260629-2"></script>
 <script>
-  // 锁屏：时钟 + 解锁
-  (function () {
-    var lock = document.getElementById('lockscreen');
-    var lt = document.getElementById('lock-time');
-    var ld = document.getElementById('lock-date');
-    function p(n) { return (n < 10 ? '0' : '') + n; }
-    function tick() {
-      var d = new Date();
-      var wd = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][d.getDay()];
-      lt.textContent = p(d.getHours()) + ':' + p(d.getMinutes());
-      ld.textContent = (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + wd;
-    }
-    tick();
-    var timer = setInterval(tick, 15000);
-    var unlocked = false;
-    function unlock() {
-      if (unlocked) return;
-      unlocked = true;
-      clearInterval(timer);
-      lock.classList.add('out');
-      setTimeout(function () {
-        lock.remove();
-        document.body.classList.remove('is-locked');
-        // 依次打开：终端 → 访达 → 浏览器 → 微信，位置岔开
-        var d = document.querySelector('.desktop');
-        var W = d.clientWidth, H = d.clientHeight;
-        XZApps.open('term', { x: W * 0.55, y: H * 0.06, silent: true });
-        setTimeout(function () { XZApps.open('doc', { x: W * 0.06, y: H * 0.12, silent: true }); }, 450);
-        setTimeout(function () { XZApps.open('fx', { x: Math.max(16, W * 0.42), y: H * 0.12, silent: true }); }, 900);
-        setTimeout(function () { XZApps.open('qrwx', { x: W * 0.76, y: H * 0.42, silent: true }); }, 1250);
-      }, 550);
-    }
-    document.getElementById('lock-enter').addEventListener('click', unlock);
-    window.addEventListener('keydown', function (e) {
-      if (!unlocked && (e.key === 'Enter' || e.key === ' ')) unlock();
-    });
-  })();
+  document.addEventListener('DOMContentLoaded', function () {
+    var I18N = window.XZI18N || {
+      date: function (v, o) { return new Date(v).toLocaleString('ru-RU', o); },
+      t: function (k) { return k; }
+    };
 
-  // 菜单栏时钟
-  (function () {
-    var el = document.getElementById('os-clock');
-    function tick() {
-      var d = new Date();
-      var wd = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][d.getDay()];
-      function p(n) { return (n < 10 ? '0' : '') + n; }
-      el.textContent = (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + wd + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
-    }
-    tick();
-    setInterval(tick, 15000);
-  })();
+    // Экран блокировки: часы + разблокировка
+    (function () {
+      var lock = document.getElementById('lockscreen');
+      var lt = document.getElementById('lock-time');
+      var ld = document.getElementById('lock-date');
+      if (!lock || !lt || !ld) return;
+      function pad(n) { return (n < 10 ? '0' : '') + n; }
+      function tick() {
+        var d = new Date();
+        lt.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes());
+        ld.textContent = I18N.date(d, { month: 'long', day: 'numeric', weekday: 'short' });
+      }
+      tick();
+      var timer = setInterval(tick, 15000);
+      var unlocked = false;
+      function unlock() {
+        if (unlocked) return;
+        unlocked = true;
+        clearInterval(timer);
+        lock.classList.add('out');
+        setTimeout(function () {
+          lock.remove();
+          document.body.classList.remove('is-locked');
+          // Открываем по очереди: терминал -> файлы -> браузер -> WeChat, со смещением
+          var d = document.querySelector('.desktop');
+          var W = d.clientWidth, H = d.clientHeight;
+          XZApps.open('term', { x: W * 0.55, y: H * 0.06, silent: true });
+          setTimeout(function () { XZApps.open('doc', { x: W * 0.06, y: H * 0.12, silent: true }); }, 450);
+          setTimeout(function () { XZApps.open('fx', { x: Math.max(16, W * 0.42), y: H * 0.12, silent: true }); }, 900);
+          setTimeout(function () { XZApps.open('qrwx', { x: W * 0.76, y: H * 0.42, silent: true }); }, 1250);
+        }, 550);
+      }
+      document.getElementById('lock-enter').addEventListener('click', unlock);
+      window.addEventListener('keydown', function (e) {
+        if (!unlocked && (e.key === 'Enter' || e.key === ' ')) unlock();
+      });
+    })();
 
-  // 当前在线人数
-  (function () {
-    var el = document.getElementById('os-online');
-    function set(n) {
-      el.textContent = '在线 ' + Math.max(1, Math.round(Number(n) || 1));
-    }
-    set(window.XZPresence && window.XZPresence.online ? window.XZPresence.online() : 1);
-    window.addEventListener('xz-presence-online', function (e) {
-      set(e.detail && e.detail.online);
-    });
-  })();
+    // Часы в строке меню
+    (function () {
+      var el = document.getElementById('os-clock');
+      if (!el) return;
+      function tick() {
+        el.textContent = I18N.date(new Date(), { month: 'short', day: 'numeric', weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      }
+      tick();
+      setInterval(tick, 15000);
+    })();
+
+    // Число пользователей онлайн
+    (function () {
+      var el = document.getElementById('os-online');
+      if (!el) return;
+      function render(n) {
+        el.textContent = I18N.t('menubar.online', { count: Math.max(1, Math.round(Number(n) || 1)) });
+      }
+      var current = window.XZPresence && window.XZPresence.online ? window.XZPresence.online() : 1;
+      render(current);
+      window.addEventListener('xz-presence-online', function (e) {
+        current = e.detail && e.detail.online;
+        render(current);
+      });
+      window.addEventListener('xz-lang', function () { render(current); });
+    })();
+  });
 </script>
 
 </body>

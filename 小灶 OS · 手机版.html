@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>小灶 iOS · 大师的AI小灶</title>
+<title>Сяоцзао iOS · AI-кухня мастера</title>
 <link rel="icon" type="image/png" href="os/avatars/dashi-favicon.png?v=20260612" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&amp;family=Noto+Serif+SC:wght@700;900&amp;display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700;900&amp;family=Noto+Serif+SC:wght@700;900&amp;family=Noto+Serif:wght@700;900&amp;display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="ios/ios.css?v=20260614-1" />
 <link rel="stylesheet" href="ios/ios26.css?v=20260612-2" />
 <script>
-  // 设备路由：桌面访问时回到 macOS 版（加 ?ios=1 可强制留在手机版）
+  // Маршрутизация по устройству: на десктопе возвращаем macOS-версию (?ios=1 оставляет мобильную)
   (function () {
     var isMobile = /iPhone|iPod|Android.*Mobile/i.test(navigator.userAgent) || window.matchMedia('(max-width: 740px)').matches;
     if (!isMobile && !/[?&]ios=1/.test(location.search)) {
@@ -19,9 +19,9 @@
   })();
 </script>
 </head>
-<body class="is-locked">
+<body class="is-locked" data-title-key="meta.title.mobile">
 
-<!-- ===================== 状态栏 ===================== -->
+<!-- ===================== Строка состояния ===================== -->
 <div class="status" aria-hidden="true">
   <b id="ios-clock">--:--</b>
   <span class="sig">
@@ -30,102 +30,114 @@
   </span>
 </div>
 
-<!-- ===================== 锁屏 ===================== -->
-<div class="lockscreen" id="lockscreen" data-screen-label="锁屏">
+<!-- ===================== Экран блокировки ===================== -->
+<div class="lockscreen" id="lockscreen" data-screen-label="Экран блокировки">
   <div class="lock-date" id="lock-date">--</div>
   <div class="lock-time" id="lock-time">--:--</div>
   <div class="lock-user">
-    <img src="os/avatars/dashi.jpg" alt="大师" />
-    <p>大师的AI小灶</p>
-    <button class="lock-enter" id="lock-enter" type="button">进入小灶</button>
+    <img src="os/avatars/dashi.jpg" alt="Мастер" data-i18n-attr="alt:lockscreen.avatarAlt" />
+    <p data-i18n="app.brand">AI-кухня мастера</p>
+    <button class="lock-enter" id="lock-enter" type="button" data-i18n="lockscreen.enter">Войти</button>
   </div>
 </div>
 
-<!-- ===================== 主屏 ===================== -->
-<main class="home" data-screen-label="iOS 主屏">
+<!-- ===================== Главный экран ===================== -->
+<main class="home" data-screen-label="Главный экран iOS">
   <div class="grid">
     <button class="app" data-act="videos">
       <img class="ic" src="os/icons/quicktime-player.png?v=20260612" alt="" />
-      <span class="lb">教程视频</span>
+      <span class="lb" data-i18n="ios.home.videos">Уроки</span>
     </button>
     <a class="app" href="https://www.douyin.com/user/MS4wLjABAAAAohe8JB4RvITJitJ69b7cV4NTaYTMYrVI43C-3SUnPPc" target="_blank" rel="noopener">
       <img class="ic" src="os/icons/douyin.png" alt="" />
-      <span class="lb">抖音</span>
+      <span class="lb" data-i18n="ios.home.douyin">Douyin</span>
     </a>
     <a class="app" href="https://www.xiaohongshu.com/user/profile/62e0c2bb000000001501408c?xsec_token=ABrZskc1MUcZWWuuMx7Fw52G80e06vkIAPUsQT_QZQ8nE%3D&xsec_source=pc_search" target="_blank" rel="noopener">
       <img class="ic" src="os/icons/redbook.png" alt="" />
-      <span class="lb">小红书</span>
+      <span class="lb" data-i18n="ios.home.redbook">Xiaohongshu</span>
     </a>
     <a class="app" href="https://space.bilibili.com/3537118131391269" target="_blank" rel="noopener">
       <img class="ic" src="os/icons/bilibili.png" alt="" />
-      <span class="lb">B站</span>
+      <span class="lb" data-i18n="ios.home.bilibili">Bilibili</span>
     </a>
     <button class="app" data-qr="shipinhao" type="button">
       <img class="ic" src="os/icons/shipinhao.png" alt="" />
-      <span class="lb">视频号</span>
+      <span class="lb" data-i18n="ios.home.shipinhao">Видеоканал</span>
     </button>
     <button class="app" data-qr="wechat" type="button">
       <img class="ic" src="os/icons/wechat.png" alt="" />
-      <span class="lb">微信</span>
+      <span class="lb" data-i18n="ios.home.wechat">WeChat</span>
     </button>
   </div>
   <img class="ios-sticker" src="os/media/sticker-cutout-person-alpha.png?v=20260613-alpha1" alt="" aria-hidden="true" draggable="false" />
 </main>
 
-<!-- ===================== Dock ===================== -->
-<nav class="dockbar" data-screen-label="iOS Dock">
-  <button data-act="term"><img src="os/icons/terminal.png" alt="关于小灶" /></button>
-  <button data-act="doc"><img src="os/icons/finder.png" alt="文档" /></button>
-  <button data-act="fx"><img src="os/icons/safari.png" alt="上线效果" /></button>
-  <button data-act="team"><img src="os/icons/contacts.png" alt="团队" /></button>
+<!-- ===================== Док ===================== -->
+<nav class="dockbar" data-screen-label="Док iOS">
+  <button data-act="term"><img src="os/icons/terminal.png" alt="О проекте" data-i18n-attr="alt:dock.term.alt" /></button>
+  <button data-act="doc"><img src="os/icons/finder.png" alt="Документы" data-i18n-attr="alt:dock.doc.alt" /></button>
+  <button data-act="fx"><img src="os/icons/safari.png" alt="Кейсы" data-i18n-attr="alt:dock.fx.alt" /></button>
+  <button data-act="team"><img src="os/icons/contacts.png" alt="Команда" data-i18n-attr="alt:dock.team.alt" /></button>
 </nav>
 
-<!-- ===================== App 视图 ===================== -->
+<!-- ===================== Экраны приложений ===================== -->
 <div id="screens"></div>
 
-<!-- ===================== 脚本 ===================== -->
-<script src="image-slot.js"></script>
-<script src="os/content.js"></script>
-<script src="os/cases.js?v=20260612-6"></script>
-<script src="ios/apps.js?v=20260613-3"></script>
-<script src="os/analytics.js?v=20260629-1"></script>
-<script src="os/presence.js?v=20260629-2"></script>
+<!-- ===================== Скрипты =====================
+     Порядок обязателен: сначала словари ru -> zh, затем рантайм i18n,
+     и только потом прикладные модули. Все теги с defer, поэтому браузер
+     выполняет их строго в порядке документа ещё до DOMContentLoaded.
+     Пути только относительные: страница работает и в корне домена, и в подкаталоге. -->
+<script defer src="os/i18n/dict.ru.js"></script>
+<script defer src="os/i18n/dict.zh.js"></script>
+<script defer src="os/i18n/i18n.js"></script>
+<script defer src="image-slot.js"></script>
+<script defer src="os/content.js"></script>
+<script defer src="os/cases.js?v=20260612-6"></script>
+<script defer src="ios/apps.js?v=20260613-3"></script>
+<script defer src="os/analytics.js?v=20260629-1"></script>
+<script defer src="os/presence.js?v=20260629-2"></script>
 <script>
-  // 时钟（状态栏 + 锁屏）
-  (function () {
-    function p(n) { return (n < 10 ? '0' : '') + n; }
-    function tick() {
-      var d = new Date();
-      var wd = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][d.getDay()];
-      var t = p(d.getHours()) + ':' + p(d.getMinutes());
-      document.getElementById('ios-clock').textContent = t;
-      var lt = document.getElementById('lock-time');
-      var ld = document.getElementById('lock-date');
-      if (lt) lt.textContent = t;
-      if (ld) ld.textContent = (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + wd;
-    }
-    tick();
-    setInterval(tick, 15000);
-  })();
+  document.addEventListener('DOMContentLoaded', function () {
+    var I18N = window.XZI18N || {
+      date: function (v, o) { return new Date(v).toLocaleString('ru-RU', o); }
+    };
 
-  // 锁屏解锁
-  (function () {
-    var lock = document.getElementById('lockscreen');
-    var unlocked = false;
-    function unlock() {
-      if (unlocked) return;
-      unlocked = true;
-      lock.classList.add('out');
-      setTimeout(function () {
-        lock.remove();
-        document.body.classList.remove('is-locked');
-      }, 550);
-    }
-    document.getElementById('lock-enter').addEventListener('click', unlock);
-    window.addEventListener('keydown', function (e) {
-      if (!unlocked && (e.key === 'Enter' || e.key === ' ')) unlock();
-    });
-  })();
+    // Часы (строка состояния + экран блокировки)
+    (function () {
+      function pad(n) { return (n < 10 ? '0' : '') + n; }
+      function tick() {
+        var d = new Date();
+        var t = pad(d.getHours()) + ':' + pad(d.getMinutes());
+        document.getElementById('ios-clock').textContent = t;
+        var lt = document.getElementById('lock-time');
+        var ld = document.getElementById('lock-date');
+        if (lt) lt.textContent = t;
+        if (ld) ld.textContent = I18N.date(d, { month: 'long', day: 'numeric', weekday: 'short' });
+      }
+      tick();
+      setInterval(tick, 15000);
+    })();
+
+    // Разблокировка
+    (function () {
+      var lock = document.getElementById('lockscreen');
+      var unlocked = false;
+      function unlock() {
+        if (unlocked) return;
+        unlocked = true;
+        lock.classList.add('out');
+        setTimeout(function () {
+          lock.remove();
+          document.body.classList.remove('is-locked');
+        }, 550);
+      }
+      document.getElementById('lock-enter').addEventListener('click', unlock);
+      window.addEventListener('keydown', function (e) {
+        if (!unlocked && (e.key === 'Enter' || e.key === ' ')) unlock();
+      });
+    })();
+  });
 </script>
 
 </body>

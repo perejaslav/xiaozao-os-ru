@@ -1,8 +1,16 @@
-// 小灶官网 · 匿名聚合埋点
+// Сяоцзао · анонимная агрегированная аналитика
 (function () {
-  if (/数据看板/.test(decodeURIComponent(location.pathname))) return;
+  // ?analytics=0 (или XZ_ANALYTICS_ENDPOINT = '') полностью отключает отправку.
+  var ENABLED = !/[?&]analytics=0\b/.test(location.search);
+  if (!ENABLED) {
+    window.XZAnalytics = { track: function () {} };
+    return;
+  }
 
   var STORE_KEY = "xz-analytics-sid";
+  function tr(key, fallback) {
+    return window.xztr ? window.xztr(key, fallback) : fallback;
+  }
   var endpoint = window.XZ_ANALYTICS_ENDPOINT ||
     (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)
       ? "http://127.0.0.1:8787/track"
@@ -96,15 +104,15 @@
       return;
     }
     if ((el = e.target.closest("[data-ios-call], .ct-call-action[data-call]"))) {
-      track("call_start", { target: "dashi", label: labelOf(el) || "拨打大师" });
+      track("call_start", { target: "dashi", label: labelOf(el) || tr('analytics.label.callStart', 'Позвонить Даши') });
       return;
     }
     if ((el = e.target.closest("[data-ios-hang], .ct-hang"))) {
-      track("call_hang", { target: "dashi", label: "挂断" });
+      track("call_hang", { target: "dashi", label: tr('analytics.label.callHang', 'Завершить') });
       return;
     }
     if ((el = e.target.closest(".tab-copy, .tab-close, .web-tab"))) {
-      track("tab_action", { target: el.className, label: labelOf(el) || "浏览器标签" });
+      track("tab_action", { target: el.className, label: labelOf(el) || tr('analytics.label.browserTab', 'Вкладка браузера') });
       return;
     }
     if ((el = e.target.closest(".desk-file"))) {
